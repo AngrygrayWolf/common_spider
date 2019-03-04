@@ -29,12 +29,12 @@ pip install requests
 
 - 扫描过程
 
-![screenshot](pic0.png)
+![screenshot](assets/pic0.png)
 
 - 扫描结果
 
-![screenshot](pic1.png)
+![screenshot](assets/pic1.png)
 
 - 外链和动态链接
 
-![screenshot](pic2.png)
+![screenshot](assets/pic2.png)
