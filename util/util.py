@@ -30,3 +30,37 @@ def get_html(url):
         return content
     else:
         return get_file_content(path)
+
+
+def get_internal(w):
+    # return w if re.search(r'^/', w[0]) is not None else None
+    return w if not is_external(w[0]) else None
+
+
+def get_external(w):
+    return w if is_external(w[0]) else None
+
+
+def is_external(links):
+    return re.search(r"(http:|www.).*?$", links)
+    # return w if re.search(r'[^http]|[www.*?]', w[0]) else None
+
+
+def get_property(key, value):
+    try:
+        return value[key]
+    except KeyError:
+        return None
+
+
+# dicts = ['css', 'js', 'ico']
+dicts = ['css', 'js', 'ico', 'png']
+
+
+# FIXME： 进行测试, 函数的使用范围不够广
+def exclude(target):
+    for k in dicts:
+        pattern = r'.*?.' + k
+        if re.match(pattern, target):
+            return False
+    return True

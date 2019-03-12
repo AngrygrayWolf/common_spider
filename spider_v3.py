@@ -281,7 +281,7 @@ def SRC_spider(url, log,crawl_deepth=3):
 
 
 if __name__ == '__main__':
-    url = 'http://www.wuhubtv.com'
+    url = 'http://www.samsan.com.tw'
     craw_deepth =5
     usage = '''
         python spider_v3.py  url  5   --> url为待爬取的网站地址，5为爬取深度，可以不设，默认为5。
@@ -289,7 +289,7 @@ if __name__ == '__main__':
     try:
         if len(sys.argv) ==2:
             url = sys.argv[1]
-            craw_deepth = 5
+           发现登录页 craw_deepth = 5
         elif len(sys.argv) ==3:
             url = sys.argv[1]
             craw_deepth = int(sys.argv[2])

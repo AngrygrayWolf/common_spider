@@ -1,27 +1,45 @@
 import chardet
 
-from util.util import get_html
+from util.util import get_html, is_external, get_property, exclude, get_internal, get_external
 from bs4 import BeautifulSoup
 
-
-url = 'http://www.gov.cn/'
+url = 'http://www.samsan.com.tw'
 content = get_html(url)
 encoding = chardet.detect(content)['encoding']
 html = BeautifulSoup(content, 'lxml')
+
 
 def has_str_href(tag):
     return tag.has_attr('src') or tag.has_attr('href')
 
 
-for per in html.find_all(has_str_href):
-    if per.has_attr('src'):
-        title = per['src']
-    elif per.has_attr('href'):
-        title = per['href']
-    else:
-        title = 'None'
-    if per.get_text():
-        print("%s: %s" % (title, per.get_text()))
+def analyze_one_page(html, url):
+    results = [(get_links(per), per.get_text()) for per in html.find_all(has_str_href)]
+    results = list(filter(None, map(lambda x: x if exclude(x[0]) else None, results)))
+    # print(results)
+    internal_links = filter(None, map(lambda x: get_internal(x), results))
+    # # print(list(results))
+    external_links = filter(None, map(lambda x: get_external(x), results))
+    # # external_links = []
+    return {url: {"internal": list(internal_links), "external": list(external_links)}}
 
 
+
+
+def get_links(per):
+    return get_property('src', per) or get_property('href', per)
+
+
+print(analyze_one_page(html, 'test'))
+
+
+# for per in html.find_all(has_str_href):
+#     if per.has_attr('src'):
+#         title = per['src']
+#     elif per.has_attr('href'):
+#         title = per['href']
+#     else:
+#         title = 'None'
+#     if per.get_text():
+#         results.append((title, per.get_text()))
 
