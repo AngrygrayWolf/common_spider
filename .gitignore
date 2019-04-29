@@ -3,3 +3,6 @@
 **/*.pyc
 .idea/
 temp
+*.log
+config/secure.py
+config/settings.py

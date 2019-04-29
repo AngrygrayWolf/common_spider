@@ -1,0 +1,3 @@
+[submodule "components/Sublist3r"]
+	path = components/Sublist3r
+	url = https://github.com/aboul3la/Sublist3r.git
