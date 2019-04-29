@@ -43,6 +43,11 @@ class ClientTestCase(unittest.TestCase):
         error_data = self.client.get_domains(ip="12.12.12.12")
         self.assertEqual(error_data, 'No results')
 
+    def test_get_ip_basic(self):
+        data = self.client.get_ip_basic(ip="8.8.8.8")
+        print(data)
+        self.assertGreater(len(data), 0)
+        self.assertEqual(len(data["results"][0]), 4)
 
 if __name__ == '__main__':
     unittest.main()

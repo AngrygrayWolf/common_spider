@@ -67,4 +67,10 @@ class Client:
             return 'No results'
         return domains
 
+    def get_ip_basic(self, ip=""):
+        query = """ip={0}""".format(ip)
+        fileds = "country_name, province, latitude, longitude"
+        raw = self.get_data(query, fields=fileds)
+        return raw
+
 

@@ -1,4 +1,7 @@
+import os
 import sys
+
+sys.path.append(os.path.abspath('../'))
 
 from util import query
 import argparse
@@ -54,9 +57,10 @@ def parser_error(errmsg):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(epilog='\tExample: \r\npython sys.argv[0] + "-d 8.8.8.8"')
+    # todo: 需要更改参数的设置，更加语义化
+    parser = argparse.ArgumentParser(epilog='\tExample: \r\npython ' + sys.argv[0] + " -d 8.8.8.8")
     parser.error = parser_error
-    parser._optionals.title = "OPTIONS"
+    # parser._optionals.title = "OPTIONS"
     parser.add_argument('-d', '--domains', help="Domain name by IP", required=True)
 
     return parser.parse_args()
@@ -67,6 +71,9 @@ def interactive():
     ip = args.domains
     banner()
     res = Query.get_domains(ip=ip)
+    if res is not None:
+        for subdomain in res:
+            print(G + subdomain + W)
 
 
 if __name__ == '__main__':
