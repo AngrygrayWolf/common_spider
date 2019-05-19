@@ -1,8 +1,6 @@
-import sys
 import unittest
 import components.fofa_sdk.client as client
 from config import secure
-sys.path.append('../')
 
 
 class ClientTestCase(unittest.TestCase):

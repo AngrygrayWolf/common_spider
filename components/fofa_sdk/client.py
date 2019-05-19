@@ -33,7 +33,7 @@ class Client:
         self.base_url = "https://fofa.so"
         self.search_api_url = "/api/v1/search/all"
         self.login_api_url = "/api/v1/info/my"
-        self.get_userinfo()  # check email and key
+        # self.get_userinfo()  # check email and key
 
     def get_userinfo(self):
         """

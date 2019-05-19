@@ -1,39 +1,20 @@
 import os
 import sys
-
 sys.path.append(os.path.abspath('../'))
+
+from util.util import get_file_domain
+
+from v1.query_main import get_all
+
+from util.query import Query
+from util.color import R, W, Y, G
+
 
 from util import query
 import argparse
 
-Query = query.Query()
-is_windows = sys.platform.startswith('win')
-
-# Console Colors
-if is_windows:
-    # Windows deserves coloring too :D
-    G = '\033[92m'  # green
-    Y = '\033[93m'  # yellow
-    B = '\033[94m'  # blue
-    R = '\033[91m'  # red
-    W = '\033[0m'  # white
-    try:
-        import win_unicode_console, colorama
-
-        win_unicode_console.enable()
-        colorama.init()
-        # Now the unicode will work ^_^
-    except:
-        print("[!] Error: Coloring libraries not installed, no coloring will be used [Check the readme]")
-        G = Y = B = R = W = G = Y = B = R = W = ''
 
 
-else:
-    G = '\033[92m'  # green
-    Y = '\033[93m'  # yellow
-    B = '\033[94m'  # blue
-    R = '\033[91m'  # red
-    W = '\033[0m'  # white
 
 
 def banner():
@@ -61,19 +42,28 @@ def parse_args():
     parser = argparse.ArgumentParser(epilog='\tExample: \r\npython ' + sys.argv[0] + " -d 8.8.8.8")
     parser.error = parser_error
     # parser._optionals.title = "OPTIONS"
-    parser.add_argument('-d', '--domains', help="Domain name by IP", required=True)
+    parser.add_argument('-d', '--domains', help="Domain name by IP")
+    parser.add_argument('--all', action='store_true', help="Get all information by domain")
+    parser.add_argument('-i', '--input', help="input files", required=False)
+
 
     return parser.parse_args()
 
 
 def interactive():
     args = parse_args()
-    ip = args.domains
+    domains = args.domains
     banner()
-    res = Query.get_domains(ip=ip)
-    if res is not None:
-        for subdomain in res:
-            print(G + subdomain + W)
+    if args.input:
+        test = get_file_domain('../input/test')
+        if args.all:
+            for one in test:
+                get_all(one[0], one[1].replace('\n', ''))
+    elif domains:
+        res = Query().get_sub_domains(domains=[domains])
+        if res is not None:
+            for subdomain in res[domains]:
+                print(G + subdomain + W)
 
 
 if __name__ == '__main__':

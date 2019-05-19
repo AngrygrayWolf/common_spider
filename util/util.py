@@ -1,18 +1,27 @@
 import logging
 import os
 import re
+import sys
 import time
 import requests
 from bs4 import BeautifulSoup
 
 # 匹配域名 解析一级域名
 from html_util import is_valid
+from util.color import R, W, Y
 
 R_Domain = r'(http|https)://(www.)?(\w+(\.)?)+'
 
 # 匹配中文英文
 R_Content = r'[\u2E80-\u9FFF]+(\w+)[\u2E80-\u9FFF]+'
-logging.basicConfig(filename='../log/out/output.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S')
+logging.basicConfig(filename='../log/out/output.log', level=logging.INFO,
+                    format='%(asctime)s %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S')
+
+
+def get_file_domain(filepath):
+    with open(filepath) as f:
+        t = f.readlines()
+        return [v.split('-') for v in t]
 
 
 def get_file_content(filepath):
@@ -31,29 +40,31 @@ def get_html(url, proxy=None):
     :param url: 爬取的网址参数，先将爬的内容缓存起来
     :return: 返回一个soup类型
     """
+    print('''%s %s %s正在爬取''' % (R, url, W))
     out_time = time.strftime("%Y%m%d", time.localtime())
     path_url = ''.join(re.findall(r'\w+', url))
-    path = 'temp/' + path_url + '-' + out_time
+    path = '../temp/' + path_url + '-' + out_time
     if not os.path.isfile(path):
         logging.info('the %s is not exist' % url)
         if proxy is None:
             content = requests.get(url=url, headers={'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT '
-                                                                   '6.3; Win64; x64)'})
+                                                                   '6.3; Win64; x64)'}, timeout=5)
         else:
             # todo: 考虑代理失效的情况
             content = requests.get(url=url, proxies=proxy, headers={'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; '
                                                                                   'Windows NT '
-                                                                                  '6.3; Win64; x64)'})
-            if is_valid(content):
-                logging.info('%s SUCCESS' % url)
-                content = content.content
-            else:
-                logging.warning('%s ERROR %s' % (url, content.status_code))
-                return 'error'
+                                                                                  '6.3; Win64; x64)'}, timeout=5)
+        if is_valid(content):
+            logging.info('%s SUCCESS' % url)
+            content = content.content
+        else:
+            logging.warning('%s ERROR %s' % (url, content.status_code))
+            return 'error'
 
         write_file_content(path, content)
         return content
     else:
+        print('''%s%s有缓存''' % (url, Y))
         return get_file_content(path)
 
 
@@ -109,3 +120,8 @@ def exclude(target):
         if re.match(pattern, target):
             return False
     return True
+
+
+if __name__ == '__main__':
+    t = get_content("http://www.baidu.com")
+    print(t.title.string)

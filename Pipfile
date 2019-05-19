@@ -1,13 +1,16 @@
 [[source]]
 name = "pypi"
-url = "https://pypi.org/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
 
 [dev-packages]
 
 [packages]
-sqlalchemy = "*"
-unittest = "*"
+openpyxl = "*"
+requests = "*"
+bs4 = "*"
+dnspython = "*"
+lxml = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
