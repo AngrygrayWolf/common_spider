@@ -6,4 +6,6 @@ temp
 *.log
 config/secure.py
 config/settings.py
-log/
+log/**
+out/**
+input/**
