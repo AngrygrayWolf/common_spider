@@ -19,7 +19,7 @@ logging.basicConfig(filename='../log/out/output.log', level=logging.INFO,
 
 
 def get_file_domain(filepath):
-    with open(filepath) as f:
+    with open(filepath, encoding="utf-8") as f:
         t = f.readlines()
         return [v.split('-') for v in t]
 
