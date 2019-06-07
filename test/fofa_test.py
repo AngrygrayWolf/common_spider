@@ -1,6 +1,9 @@
+import sys
 import unittest
 import components.fofa_sdk.client as client
 from config import secure
+
+sys.path.append('../')
 
 
 class ClientTestCase(unittest.TestCase):
@@ -35,6 +38,16 @@ class ClientTestCase(unittest.TestCase):
 
         self.assertEqual(len(data["results"][0]), len(fields.split(',')))
 
+    def test_get_data_by_ip(self):
+        query = """91.223.115.81"""
+        fields = "port"
+        data = self.client.get_data(query, fields=fields)
+        self.assertIn("results", data)
+        self.assertIn("page", data)
+        self.assertIn("size", data)
+        self.assertIn("mode", data)
+        self.assertIn("query", data)
+
     def test_get_domain(self):
         data = self.client.get_domains(ip="91.223.115.81")
         self.assertGreater(len(data), 0)
@@ -46,6 +59,7 @@ class ClientTestCase(unittest.TestCase):
         print(data)
         self.assertGreater(len(data), 0)
         self.assertEqual(len(data["results"][0]), 4)
+
 
 if __name__ == '__main__':
     unittest.main()
